@@ -16,15 +16,15 @@ const Login = () => {
 
     const handleLogin = async (e) => {
       e.preventDefault();
-  
+    
       const loginData = { email, password };
-  
+    
       fetch(`${apiBaseUrl}/api/v1/admin/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(loginData),
       }).finally(() => {
-        navigate("/welcome");
+        navigate("/welcome", { state: { email, password } });
       });
     };
 

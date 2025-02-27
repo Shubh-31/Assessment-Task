@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import loginPageLogo from "../assets/loginPageLogo.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import {toast, Toaster} from "react-hot-toast"
+import { toast, Toaster } from "react-hot-toast";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -13,44 +13,42 @@ const Register = () => {
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const navigate = useNavigate();
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
+  const apiBaseUrl = window.location.origin.includes("localhost")
+    ? `http://localhost:${window.location.port || 2018}`
+    : window.location.origin;
 
-    if (password !== confirmPassword) {
-      toast.alert("Passwords do not match!");
-      return;
-    }
-
-    const userData = {
-      fullName: name,
-      firstName: name.split(" ")[0] || "",
-      lastName: name.split(" ")[1] || "",
-      phone,
-      email,
-      password,
-    };
-
-    try {
-      const response = await fetch("http://localhost/api/v1/admin/registration", {
+    const handleRegister = async (e) => {
+      e.preventDefault();
+    
+      if (password !== confirmPassword) {
+        toast.error("Passwords do not match!");
+        return;
+      }
+    
+      const userData = {
+        fullName: name,
+        firstName: name.split(" ")[0] || "",
+        lastName: name.split(" ")[1] || "",
+        phone,
+        email,
+        password,
+      };
+    
+      fetch(`${apiBaseUrl}/api/v1/admin/registration`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
+      }).finally(() => {
+        navigate("/welcome", { state: userData }); 
       });
-
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message || "Registration failed");
-
-      toast.success("User registered successfully!");
-    } catch (error) {
-      console.error("Error:", error.message);
-      toast.error("Failed to register user!");
-    }
-  };
+    };
+    
 
   return (
     <div className="flex h-screen items-center justify-center relative">
-      <Toaster/>
+      <Toaster />
       <div className="w-9/10 h-full flex backdrop-blur-lg bg-white/30 shadow-2xl rounded-2xl relative p-5">
         <div className="w-1/2 flex items-center justify-center backdrop-blue-lg rounded-l-2xl">
           <img src={loginPageLogo} alt="Login" className="w-3/4" />
@@ -64,16 +62,12 @@ const Register = () => {
         <div className="w-1/2 flex flex-col justify-start items-left ml-6">
           <div className="w-4/5 h-auto bg-white shadow-lg rounded-lg p-8 flex flex-col">
             <form onSubmit={handleRegister} className="form-container flex flex-col flex-grow">
-              <h2 className="text-2xl font-bold text-black text-left">
-                Create New Account
-              </h2>
+              <h2 className="text-2xl font-bold text-black text-left">Create New Account</h2>
               <p className="text-gray-600 mb-6 font-medium text-left">
                 Welcome to the Free Shops App Controller
               </p>
 
-              <label className="text-gray-700 font-semibold text-left text-sm">
-                Your Name
-              </label>
+              <label className="text-gray-700 font-semibold text-left text-sm">Your Name</label>
               <input
                 type="text"
                 value={name}
@@ -82,9 +76,7 @@ const Register = () => {
                 required
               />
 
-              <label className="text-gray-700 font-semibold text-left text-sm">
-                Email
-              </label>
+              <label className="text-gray-700 font-semibold text-left text-sm">Email</label>
               <input
                 type="email"
                 value={email}
@@ -93,9 +85,7 @@ const Register = () => {
                 required
               />
 
-              <label className="text-gray-700 font-semibold text-left text-sm">
-                Phone Number
-              </label>
+              <label className="text-gray-700 font-semibold text-left text-sm">Phone Number</label>
               <input
                 type="number"
                 value={phone}
@@ -105,9 +95,7 @@ const Register = () => {
               />
 
               <div className="form-container flex flex-col flex-grow mb-4">
-                <label className="text-gray-700 font-semibold text-left text-sm">
-                  Password
-                </label>
+                <label className="text-gray-700 font-semibold text-left text-sm">Password</label>
                 <div className="relative w-full">
                   <input
                     type={showPassword ? "text" : "password"}

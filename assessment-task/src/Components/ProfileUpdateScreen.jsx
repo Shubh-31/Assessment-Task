@@ -1,17 +1,20 @@
 import React, { useState } from "react";
-import { FaCamera } from "react-icons/fa";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaCamera, FaEye, FaEyeSlash } from "react-icons/fa";
 import toast from "react-hot-toast";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const ProfileUpdateScreen = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { email, password, fullName, firstName, lastName, phone } = location.state || {};
+
   const [showPassword, setShowPassword] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
   const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
-    phone: "",
-    password: "",
+    fullName: fullName || "Not Available",
+    email: email || "Not Available",
+    phone: phone || "Not Available",
+    password: password || "Not Available",
   });
 
   const handleImageUpload = (event) => {
@@ -19,7 +22,7 @@ const ProfileUpdateScreen = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setProfileImage(reader.result);
+        setProfileImage(reader.result); 
       };
       reader.readAsDataURL(file);
     }
@@ -30,36 +33,34 @@ const ProfileUpdateScreen = () => {
   };
 
   const handleSave = async () => {
-    try {
-      const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MTYyM2U4ZjcyNmU3MTczYmE0MjQ1MSIsImlhdCI6MTcyOTUwNDI0MiwiZXhwIjoxNzYxMDQwMjQyfQ.u6dELPLGwiGa5SHmhOdREAciXsPkMl-vXu1GDji9pqw";
-      const response = await fetch(`${window.location.origin}/api/v1/admin/update`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (!response.ok) throw new Error("Failed to update profile");
-      toast.success("Profile updated successfully");
-    } catch (error) {
-      toast.error(error.message);
-    }
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MTYyM2U4ZjcyNmU3MTczYmE0MjQ1MSIsImlhdCI6MTcyOTUwNDI0MiwiZXhwIjoxNzYxMDQwMjQyfQ.u6dELPLGwiGa5SHmhOdREAciXsPkMl-vXu1GDji9pqw";
+    const updatedData = { ...formData, profileImage };
+  
+    fetch(`${window.location.origin}/api/v1/admin/update`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(updatedData),
+    }).finally(() => {
+      navigate("/profile", { state: updatedData });
+    });
   };
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-400 to-orange-600 w-full">
       <div className="w-4/5 bg-white/20 backdrop-blur-lg rounded-2xl p-10 flex justify-center relative">
         <div className="w-3/5 bg-white shadow-lg rounded-xl p-8 relative">
           <button className="absolute top-4 right-4 text-gray-600 font-medium hover:underline text-sm cursor-pointer">
-            <Link to = '/profile'> SKIP</Link>
-            
+            <Link to="/profile">SKIP</Link>
           </button>
+
           <div className="flex justify-center mb-6">
             <label htmlFor="profile-upload" className="cursor-pointer">
               {profileImage ? (
-                <img src={profileImage} alt="Profile" className="w-20 h-20 rounded-full" />
+                <img src={profileImage} alt="Profile" className="w-20 h-20 rounded-full object-cover" />
               ) : (
                 <div className="w-20 h-20 bg-gray-400 rounded-full flex items-center justify-center">
                   <FaCamera className="text-white text-3xl" />
@@ -75,7 +76,10 @@ const ProfileUpdateScreen = () => {
             />
           </div>
 
-          <h4 className="text-sm font-light text-blue-400 text-center mb-4 cursor-pointer" onClick={() => document.getElementById('profile-upload').click()}>
+          <h4
+            className="text-sm font-light text-blue-400 text-center mb-4 cursor-pointer"
+            onClick={() => document.getElementById("profile-upload").click()}
+          >
             Upload Profile Picture
           </h4>
 
@@ -86,7 +90,7 @@ const ProfileUpdateScreen = () => {
               name="fullName"
               value={formData.fullName}
               onChange={handleChange}
-              className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 "
+              className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
 
             <label className="text-gray-700 font-semibold text-left mb-1">Email</label>
@@ -106,10 +110,9 @@ const ProfileUpdateScreen = () => {
               onChange={handleChange}
               className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <label className="text-gray-700 font-semibold text-left text-sm">Password</label>
 
+            <label className="text-gray-700 font-semibold text-left mb-1">Password</label>
             <div className="relative w-full">
-           
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
@@ -126,10 +129,14 @@ const ProfileUpdateScreen = () => {
             </div>
 
             <div className="flex flex-col justify-center items-center">
-              <button className="bg-none border-none text-gray-400 font-semibold mb-6 cursor-pointer">
+              <button type="button" className="bg-none border-none text-gray-400 font-semibold mb-6 cursor-pointer">
                 Change Password
               </button>
-              <button onClick={handleSave} type="button" className="bg-blue-400 text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-blue-500 transition-all duration-300 cursor-pointer w-2/5">
+              <button
+                onClick={handleSave}
+                type="button"
+                className="bg-blue-400 text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-blue-500 transition-all duration-300 cursor-pointer w-2/5"
+              >
                 Save
               </button>
             </div>
