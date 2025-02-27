@@ -9,8 +9,8 @@ const Welcome = () => {
   const { fullName, firstName, lastName, phone, email, password } = location.state || {};
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-100 w-full rounded">
-      <div className="w-4/5 bg-white/20 backdrop-blur-lg rounded-2xl p-10 flex justify-center">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br w-full rounded">
+      <div className="w-4/5 bg-white/20 backdrop-blur-xl rounded-2xl p-10 flex justify-center">
         <div className="w-3/5 bg-white shadow-lg rounded-xl p-8 text-center">
           <div className="flex justify-center mb-4">
             <img src={loginPageLogo} alt="Logo" className="w-20" />
