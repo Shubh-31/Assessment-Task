@@ -51,7 +51,7 @@ const Register = () => {
       <Toaster />
       <div className="w-9/10 h-full flex backdrop-blur-lg bg-white/30 shadow-2xl rounded-2xl relative p-5">
         <div className="w-1/2 flex items-center justify-center backdrop-blue-lg rounded-l-2xl">
-          <img src={loginPageLogo} alt="Login" className="w-3/4" />
+          <img src={loginPageLogo} alt="Login" className="w-1/2" />
         </div>
 
         <div className="w-1 bg-orange-500 relative mx-6">
@@ -87,7 +87,7 @@ const Register = () => {
 
               <label className="text-gray-700 font-semibold text-left text-sm">Phone Number</label>
               <input
-                type="number"
+                type="text"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 className="w-full p-3 mb-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
@@ -151,7 +151,9 @@ const Register = () => {
       </div>
 
       <div className="absolute w-32 h-20 right-2 bg-orange-300 -z-10 rounded-full blur-xl -top-12"></div>
-      <div className="absolute w-24 h-24 bg-orange-300 -z-10 rounded-full blur-xl -top-12 -right-6"></div>
+      <div className="absolute w-24 h-24 bg-orange-300 -z-10 rounded-full blur-xl top-12 -right-6"></div>
+      <div className="absolute w-32 h-20 right-2 bg-orange-300 -z-10 rounded-full blur-xl -top-12"></div>
+      <div className="absolute w-24 h-24 bg-orange-300 -z-10 rounded-full blur-xl bottom-24 left-40"></div>
     </div>
   );
 };

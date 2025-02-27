@@ -50,7 +50,7 @@ const ProfileUpdateScreen = () => {
   
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-400 to-orange-600 w-full">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br w-full">
       <div className="w-4/5 bg-white/20 backdrop-blur-lg rounded-2xl p-10 flex justify-center relative">
         <div className="w-3/5 bg-white shadow-lg rounded-xl p-8 relative">
           <button className="absolute top-4 right-4 text-gray-600 font-medium hover:underline text-sm cursor-pointer">
@@ -104,7 +104,7 @@ const ProfileUpdateScreen = () => {
 
             <label className="text-gray-700 font-semibold text-left mb-1">Phone Number</label>
             <input
-              type="number"
+              type="text"
               name="phone"
               value={formData.phone}
               onChange={handleChange}
@@ -143,6 +143,10 @@ const ProfileUpdateScreen = () => {
           </form>
         </div>
       </div>
+      <div className="absolute w-32 h-20 right-2 bg-orange-300 -z-10 rounded-full blur-xl -top-12"></div>
+      <div className="absolute w-24 h-24 bg-orange-300 -z-10 rounded-full blur-xl top-12 -right-6"></div>
+      <div className="absolute w-32 h-20 right-2 bg-orange-300 -z-10 rounded-full blur-xl -top-12"></div>
+      <div className="absolute w-24 h-24 bg-orange-300 -z-10 rounded-full blur-xl bottom-24 left-40"></div>
     </div>
   );
 };

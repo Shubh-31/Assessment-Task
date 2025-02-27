@@ -9,7 +9,7 @@ const Welcome = () => {
   const { fullName, firstName, lastName, phone, email, password } = location.state || {};
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-400 to-orange-600 w-full">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-100 w-full rounded">
       <div className="w-4/5 bg-white/20 backdrop-blur-lg rounded-2xl p-10 flex justify-center">
         <div className="w-3/5 bg-white shadow-lg rounded-xl p-8 text-center">
           <div className="flex justify-center mb-4">
@@ -34,6 +34,11 @@ const Welcome = () => {
           </button>
         </div>
       </div>
+      
+      <div className="absolute w-32 h-20 right-2 bg-orange-300 -z-10 rounded-full blur-xl -top-12"></div>
+      <div className="absolute w-24 h-24 bg-orange-300 -z-10 rounded-full blur-xl top-12 -right-6"></div>
+      <div className="absolute w-32 h-20 right-2 bg-orange-300 -z-10 rounded-full blur-xl -top-12"></div>
+      <div className="absolute w-24 h-24 bg-orange-300 -z-10 rounded-full blur-xl bottom-24 left-40"></div>
     </div>
   );
 };
