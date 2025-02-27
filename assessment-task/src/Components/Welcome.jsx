@@ -1,5 +1,6 @@
 import React from "react";
 import loginPageLogo from "../assets/loginPageLogo.png";
+import { Link } from "react-router-dom";
 
 const Welcome = () => {
   return (
@@ -16,12 +17,12 @@ const Welcome = () => {
           </h3>
 
           <p className="text-gray-600 mb-6 text-sm leading-relaxed px-4">
-            Manage and monitor all aspects of your app seamlessly from one place.
-            Use the tools below to get started.
+            Manage and monitor all aspects of your app seamlessly from one
+            place. Use the tools below to get started.
           </p>
 
           <button className="bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-blue-700 transition-all duration-300 cursor-pointer text-sm">
-            Get Started
+            <Link to="/profileUpdate">Get Started</Link>
           </button>
         </div>
       </div>

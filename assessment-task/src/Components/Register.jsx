@@ -1,14 +1,56 @@
-import React , {useState} from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import loginPageLogo from "../assets/loginPageLogo.png";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import {toast, Toaster} from "react-hot-toast"
 
 const Register = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+  const handleRegister = async (e) => {
+    e.preventDefault();
+
+    if (password !== confirmPassword) {
+      toast.alert("Passwords do not match!");
+      return;
+    }
+
+    const userData = {
+      fullName: name,
+      firstName: name.split(" ")[0] || "",
+      lastName: name.split(" ")[1] || "",
+      phone,
+      email,
+      password,
+    };
+
+    try {
+      const response = await fetch("http://localhost/api/v1/admin/registration", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+      });
+
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Registration failed");
+
+      toast.success("User registered successfully!");
+    } catch (error) {
+      console.error("Error:", error.message);
+      toast.error("Failed to register user!");
+    }
+  };
+
   return (
-    <div className="flex h-screen items-center justify-center relative ">
+    <div className="flex h-screen items-center justify-center relative">
+      <Toaster/>
       <div className="w-9/10 h-full flex backdrop-blur-lg bg-white/30 shadow-2xl rounded-2xl relative p-5">
         <div className="w-1/2 flex items-center justify-center backdrop-blue-lg rounded-l-2xl">
           <img src={loginPageLogo} alt="Login" className="w-3/4" />
@@ -21,7 +63,7 @@ const Register = () => {
 
         <div className="w-1/2 flex flex-col justify-start items-left ml-6">
           <div className="w-4/5 h-auto bg-white shadow-lg rounded-lg p-8 flex flex-col">
-            <div className="form-container flex flex-col flex-grow">
+            <form onSubmit={handleRegister} className="form-container flex flex-col flex-grow">
               <h2 className="text-2xl font-bold text-black text-left">
                 Create New Account
               </h2>
@@ -34,7 +76,10 @@ const Register = () => {
               </label>
               <input
                 type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 className="w-full p-3 mb-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                required
               />
 
               <label className="text-gray-700 font-semibold text-left text-sm">
@@ -42,15 +87,21 @@ const Register = () => {
               </label>
               <input
                 type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full p-3 mb-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                required
               />
 
               <label className="text-gray-700 font-semibold text-left text-sm">
                 Phone Number
               </label>
               <input
-                type="text"
+                type="number"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
                 className="w-full p-3 mb-1 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                required
               />
 
               <div className="form-container flex flex-col flex-grow mb-4">
@@ -60,7 +111,10 @@ const Register = () => {
                 <div className="relative w-full">
                   <input
                     type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     className="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    required
                   />
                   <button
                     type="button"
@@ -77,7 +131,10 @@ const Register = () => {
                 <div className="relative w-full">
                   <input
                     type={showConfirmPassword ? "text" : "password"}
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
                     className="w-full p-3 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    required
                   />
                   <button
                     type="button"
@@ -88,16 +145,19 @@ const Register = () => {
                   </button>
                 </div>
               </div>
-            </div>
 
-            <div className="flex flex-col justify-center items-center">
-              <button className="w-3/5 bg-blue-600 text-white py-3 rounded-lg mb-4 hover:bg-blue-700 font-semibold text-sm cursor-pointer">
-                Create Account
-              </button>
-              <button className="w-full text-blue-600 py-3 rounded-lg bg-transparent hover:underline text-sm">
-                <Link to="/">Already have an account?</Link>
-              </button>
-            </div>
+              <div className="flex flex-col justify-center items-center">
+                <button
+                  type="submit"
+                  className="w-3/5 bg-blue-600 text-white py-3 rounded-lg mb-4 hover:bg-blue-700 font-semibold text-sm cursor-pointer"
+                >
+                  Create Account
+                </button>
+                <button className="w-full text-blue-600 py-3 rounded-lg bg-transparent hover:underline text-sm">
+                  <Link to="/">Already have an account?</Link>
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>

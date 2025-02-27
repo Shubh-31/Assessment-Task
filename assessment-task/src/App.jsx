@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Register from './Components/Register';
 import Welcome from './Components/Welcome';
 import ProfileUpdateScreen from './Components/ProfileUpdateScreen';
+import Profile from './Components/Profile';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/welcome" element={<Welcome />} />
         <Route path="/profileUpdate" element={<ProfileUpdateScreen />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </Router>
   );
